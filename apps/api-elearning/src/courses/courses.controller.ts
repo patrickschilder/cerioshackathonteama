@@ -14,7 +14,7 @@ import { CreateCourseDto, UpdateCourseDto } from "./courses.dto.js";
 import { RolesGuard } from "../common/roles.guard.js";
 import { Roles } from "../common/roles.decorator.js";
 import { CurrentUser } from "../common/current-user.decorator.js";
-import type { UserDto } from "@cerios/shared-types";
+import type { CourseDto, UserDto } from "@cerios/shared-types";
 
 @Controller("courses")
 @UseGuards(AuthGuard("jwt"), RolesGuard)
@@ -22,18 +22,18 @@ export class CoursesController {
     constructor(private readonly coursesService: CoursesService) { }
 
     @Get()
-    findAll(@CurrentUser() user: UserDto) {
+    findAll(@CurrentUser() user: UserDto): Promise<CourseDto[]> {
         return this.coursesService.findAll(user);
     }
 
     @Get(":id")
-    findOne(@Param("id") id: string, @CurrentUser() user: UserDto) {
+    findOne(@Param("id") id: string, @CurrentUser() user: UserDto): Promise<CourseDto> {
         return this.coursesService.findOne(id, user);
     }
 
     @Post()
     @Roles("INSTRUCTOR", "ADMIN")
-    create(@Body() dto: CreateCourseDto, @CurrentUser() user: UserDto) {
+    create(@Body() dto: CreateCourseDto, @CurrentUser() user: UserDto): Promise<CourseDto> {
         return this.coursesService.create(dto, user);
     }
 
@@ -43,13 +43,13 @@ export class CoursesController {
         @Param("id") id: string,
         @Body() dto: UpdateCourseDto,
         @CurrentUser() user: UserDto,
-    ) {
+    ): Promise<CourseDto> {
         return this.coursesService.update(id, dto, user);
     }
 
     @Delete(":id")
     @Roles("INSTRUCTOR", "ADMIN")
-    remove(@Param("id") id: string, @CurrentUser() user: UserDto) {
+    remove(@Param("id") id: string, @CurrentUser() user: UserDto): Promise<void> {
         return this.coursesService.remove(id, user);
     }
 }

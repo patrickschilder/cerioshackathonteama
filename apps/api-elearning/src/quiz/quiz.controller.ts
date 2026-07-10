@@ -12,7 +12,7 @@ import { Roles } from "../common/roles.decorator.js";
 import { CurrentUser } from "../common/current-user.decorator.js";
 import { QuizService } from "./quiz.service.js";
 import { SubmitQuizDto } from "./quiz.dto.js";
-import type { UserDto } from "@cerios/shared-types";
+import type { QuizDto, QuizResultDto, UserDto } from "@cerios/shared-types";
 
 @Controller("courses/:courseId/quiz")
 @UseGuards(AuthGuard("jwt"), RolesGuard)
@@ -21,12 +21,12 @@ export class QuizController {
 
     @Post("generate")
     @Roles("INSTRUCTOR", "ADMIN")
-    generate(@Param("courseId") courseId: string) {
+    generate(@Param("courseId") courseId: string): Promise<QuizDto> {
         return this.quizService.generateQuiz(courseId);
     }
 
     @Get()
-    getQuiz(@Param("courseId") courseId: string) {
+    getQuiz(@Param("courseId") courseId: string): Promise<QuizDto> {
         return this.quizService.getQuiz(courseId, false);
     }
 
@@ -36,7 +36,7 @@ export class QuizController {
         @Param("courseId") courseId: string,
         @Body() dto: SubmitQuizDto,
         @CurrentUser() user: UserDto,
-    ) {
+    ): Promise<QuizResultDto> {
         return this.quizService.submitQuiz(courseId, user.id, dto);
     }
 }

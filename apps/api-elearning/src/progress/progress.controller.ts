@@ -8,7 +8,7 @@ import {
 import { AuthGuard } from "@nestjs/passport";
 import { ProgressService } from "./progress.service.js";
 import { CurrentUser } from "../common/current-user.decorator.js";
-import type { UserDto } from "@cerios/shared-types";
+import type { CourseProgressDto, UserDto } from "@cerios/shared-types";
 
 @Controller("courses/:courseId/progress")
 @UseGuards(AuthGuard("jwt"))
@@ -19,7 +19,7 @@ export class ProgressController {
     getProgress(
         @Param("courseId") courseId: string,
         @CurrentUser() user: UserDto,
-    ) {
+    ): Promise<CourseProgressDto> {
         return this.progressService.getCourseProgress(user.id, courseId);
     }
 
@@ -28,7 +28,7 @@ export class ProgressController {
         @Param("courseId") courseId: string,
         @Param("slideId") slideId: string,
         @CurrentUser() user: UserDto,
-    ) {
+    ): Promise<void> {
         return this.progressService.markSlideViewed(user.id, courseId, slideId);
     }
 }

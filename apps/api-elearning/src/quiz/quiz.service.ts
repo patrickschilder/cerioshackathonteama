@@ -86,7 +86,7 @@ export class QuizService {
     }
 
     async getQuiz(courseId: string, includeAnswers = false): Promise<QuizDto> {
-        let quiz = await this.prisma.quiz.findUnique({
+        const quiz = await this.prisma.quiz.findUnique({
             where: { courseId },
             include: {
                 questions: { orderBy: { index: "asc" } },
@@ -199,7 +199,7 @@ export class QuizService {
             );
             if (candidates.length === 0) continue;
 
-            const keyWord = candidates[Math.floor(candidates.length / 2)] ?? candidates[0]!;
+            const keyWord = candidates[Math.floor(candidates.length / 2)] ?? candidates[0];
             const questionText = sentence.replace(keyWord, "______") + "?";
             const distractors = this.pickDistractors(keyWord, wordPool);
 

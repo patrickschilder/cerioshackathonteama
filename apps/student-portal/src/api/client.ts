@@ -13,13 +13,13 @@ const API_BASE = import.meta.env["VITE_API_URL"] ?? "http://localhost:3000";
 async function authFetch(url: string, options: RequestInit = {}): Promise<Response> {
     await keycloak.updateToken(30).catch(() => keycloak.login());
 
+    const headers = new Headers(options.headers);
+    headers.set("Content-Type", "application/json");
+    headers.set("Authorization", `Bearer ${keycloak.token ?? ""}`);
+
     const response = await fetch(`${API_BASE}${url}`, {
         ...options,
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${keycloak.token ?? ""}`,
-            ...options.headers,
-        },
+        headers,
     });
 
     if (!response.ok) {

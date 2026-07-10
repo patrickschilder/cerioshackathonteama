@@ -13,7 +13,7 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export function AuthProvider({ children }: { children: React.ReactNode }): React.ReactElement {
 	const [ready, setReady] = useState(false);
 	const [authenticated, setAuthenticated] = useState(false);
 	const initStarted = useRef(false);
@@ -38,8 +38,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		authenticated,
 		token: keycloak.token,
 		userRoles: keycloak.realmAccess?.roles ?? [],
-		login: () => keycloak.login(),
-		logout: () => keycloak.logout({ redirectUri: window.location.origin }),
+		login: () => {
+			keycloak.login().catch(() => {});
+		},
+		logout: () => {
+			keycloak.logout({ redirectUri: window.location.origin }).catch(() => {});
+		},
 	};
 
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

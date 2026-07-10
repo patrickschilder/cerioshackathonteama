@@ -55,7 +55,7 @@ export class UploadsController {
     async uploadPptx(
         @Param("courseId") courseId: string,
         @UploadedFile() file: Express.Multer.File,
-    ) {
+    ): Promise<{ message: string; slideCount: number; slides: Array<{ index: number; title: string | null }> }> {
         if (!file) {
             throw new BadRequestException("No file uploaded");
         }

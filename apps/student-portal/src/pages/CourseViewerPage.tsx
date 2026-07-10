@@ -4,7 +4,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 
 import { getCourse, getSlides, getProgress, markSlideViewed } from "../api/client.js";
 
-export function CourseViewerPage() {
+export function CourseViewerPage(): React.ReactElement {
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
 
@@ -17,14 +17,21 @@ export function CourseViewerPage() {
 
 	useEffect(() => {
 		if (!id) return;
-		Promise.all([getCourse(id), getSlides(id), getProgress(id)])
-			.then(([c, s, p]) => {
+
+		async function load(courseId: string): Promise<void> {
+			try {
+				const [c, s, p] = await Promise.all([getCourse(courseId), getSlides(courseId), getProgress(courseId)]);
 				setCourse(c);
 				setSlides(s);
 				setProgress(p);
-			})
-			.catch((e: unknown) => setError(String(e)))
-			.finally(() => setLoading(false));
+			} catch (e: unknown) {
+				setError(String(e));
+			} finally {
+				setLoading(false);
+			}
+		}
+
+		void load(id);
 	}, [id]);
 
 	const markViewed = useCallback(
@@ -49,7 +56,7 @@ export function CourseViewerPage() {
 
 	useEffect(() => {
 		const slide = slides[currentIndex];
-		if (slide) markViewed(slide);
+		if (slide) void markViewed(slide);
 	}, [currentIndex, slides, markViewed]);
 
 	if (loading)
@@ -187,7 +194,12 @@ export function CourseViewerPage() {
 						</button>
 
 						{isLast ? (
-							<button className="btn btn-primary" onClick={() => navigate(`/courses/${id}/quiz`)}>
+							<button
+								className="btn btn-primary"
+								onClick={() => {
+									void navigate(`/courses/${id}/quiz`);
+								}}
+							>
 								Quiz starten →
 							</button>
 						) : (
