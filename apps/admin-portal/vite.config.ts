@@ -7,9 +7,9 @@ export default defineConfig({
     resolve: {
         alias: {
             "@cerios/shared-types": resolve(__dirname, "../../packages/shared-types/src/index.ts"),
-            "@cerios/ui-theme": resolve(__dirname, "../../packages/ui-theme/src/index.ts"),
             "@cerios/ui-theme/theme.css": resolve(__dirname, "../../packages/ui-theme/src/theme.css"),
             "@cerios/ui-theme/components.css": resolve(__dirname, "../../packages/ui-theme/src/components.css"),
+            "@cerios/ui-theme": resolve(__dirname, "../../packages/ui-theme/src/index.ts"),
         },
     },
     server: {
