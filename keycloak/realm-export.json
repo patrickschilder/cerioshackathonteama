@@ -41,7 +41,19 @@
                 "http://localhost:5174"
             ],
             "standardFlowEnabled": true,
-            "directAccessGrantsEnabled": false
+            "directAccessGrantsEnabled": false,
+            "protocolMappers": [
+                {
+                    "name": "api-elearning-audience",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-audience-mapper",
+                    "config": {
+                        "included.client.audience": "api-elearning",
+                        "id.token.claim": "false",
+                        "access.token.claim": "true"
+                    }
+                }
+            ]
         },
         {
             "clientId": "student-portal",
@@ -55,7 +67,19 @@
                 "http://localhost:5173"
             ],
             "standardFlowEnabled": true,
-            "directAccessGrantsEnabled": false
+            "directAccessGrantsEnabled": false,
+            "protocolMappers": [
+                {
+                    "name": "api-elearning-audience",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-audience-mapper",
+                    "config": {
+                        "included.client.audience": "api-elearning",
+                        "id.token.claim": "false",
+                        "access.token.claim": "true"
+                    }
+                }
+            ]
         }
     ],
     "users": [

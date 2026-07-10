@@ -37,24 +37,26 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     async validate(payload: KeycloakJwtPayload): Promise<UserDto> {
         const realmRoles = payload.realm_access?.roles ?? [];
         const role = this.mapKeycloakRole(realmRoles);
+        const email = payload.email ?? "";
 
-        // Upsert the user record so the DB stays in sync with Keycloak
-        const user = await this.prisma.user.upsert({
-            where: { keycloakId: payload.sub },
-            update: {
-                email: payload.email ?? "",
-                firstName: payload.given_name ?? "",
-                lastName: payload.family_name ?? "",
-                role,
-            },
-            create: {
-                keycloakId: payload.sub,
-                email: payload.email ?? "",
-                firstName: payload.given_name ?? "",
-                lastName: payload.family_name ?? "",
-                role,
-            },
-        });
+        // Reconcile the DB record with Keycloak, keyed by keycloakId first,
+        // falling back to email (e.g. for rows seeded with a placeholder
+        // keycloakId before the real Keycloak subject was known).
+        const existing =
+            (await this.prisma.user.findUnique({ where: { keycloakId: payload.sub } })) ??
+            (email ? await this.prisma.user.findUnique({ where: { email } }) : null);
+
+        const data = {
+            keycloakId: payload.sub,
+            email,
+            firstName: payload.given_name ?? "",
+            lastName: payload.family_name ?? "",
+            role,
+        };
+
+        const user = existing
+            ? await this.prisma.user.update({ where: { id: existing.id }, data })
+            : await this.prisma.user.create({ data });
 
         if (!user) {
             throw new UnauthorizedException("User not found");
