@@ -1,5 +1,5 @@
 import type { CourseDto, SlideDto, CourseProgressDto } from "@cerios/shared-types";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 
 import { getCourse, getSlides, getProgress, markSlideViewed } from "../api/client.js";
@@ -14,6 +14,11 @@ export function CourseViewerPage(): React.ReactElement {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	// Synchronous guard against double-counting a slide view. A ref (rather than the
+	// `progress` state) is required because React 18 StrictMode double-invokes effects in
+	// dev, and both invocations would otherwise read the same stale `progress` closure
+	// before either state update lands, letting both increment `viewedSlides`.
+	const markedSlideIdsRef = useRef<Set<string>>(new Set());
 
 	useEffect(() => {
 		if (!id) return;
@@ -24,6 +29,7 @@ export function CourseViewerPage(): React.ReactElement {
 				setCourse(c);
 				setSlides(s);
 				setProgress(p);
+				markedSlideIdsRef.current = new Set(p.viewedSlideIds);
 			} catch (e: unknown) {
 				setError(String(e));
 			} finally {
@@ -37,11 +43,17 @@ export function CourseViewerPage(): React.ReactElement {
 	const markViewed = useCallback(
 		async (slide: SlideDto) => {
 			if (!id) return;
-			if (!progress) return; // wait until progress is loaded to avoid double-counting
-			if (progress.viewedSlideIds.includes(slide.id)) return;
-			await markSlideViewed(id, slide.id).catch(() => {});
+			if (markedSlideIdsRef.current.has(slide.id)) return;
+			markedSlideIdsRef.current.add(slide.id);
+			const ok = await markSlideViewed(id, slide.id)
+				.then(() => true)
+				.catch(() => false);
+			if (!ok) {
+				markedSlideIdsRef.current.delete(slide.id);
+				return;
+			}
 			setProgress(prev =>
-				prev
+				prev && !prev.viewedSlideIds.includes(slide.id)
 					? {
 							...prev,
 							viewedSlides: prev.viewedSlides + 1,
@@ -51,7 +63,7 @@ export function CourseViewerPage(): React.ReactElement {
 					: prev
 			);
 		},
-		[id, progress]
+		[id]
 	);
 
 	useEffect(() => {

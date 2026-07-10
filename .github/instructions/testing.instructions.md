@@ -41,6 +41,19 @@ description: "Use when writing, reviewing, or reasoning about unit tests or end-
   must ship with a unit test in the same change.
 - Any new non-trivial React component or hook (conditional rendering, derived state) must ship
   with a unit test in the same change.
+- Every bug fix must ship with a regression test in the same change, no exceptions. Before
+  writing the fix, first write (or extend) a test that reproduces the reported bug and fails
+  against the current (broken) code. Only then implement the fix, and confirm the same test now
+  passes. This proves the fix actually addresses the reported symptom and prevents the bug from
+  silently reappearing later.
+  - Name the test after the observable bug symptom, not the internal cause, e.g.
+    `it("shows 25% (not 50%) after viewing only the first of 4 slides")`.
+  - If the bug can't be reproduced in a fast unit test (e.g. it only manifests through real
+    infra like Keycloak or Docker networking), add a Playwright E2E case in `apps/e2e` instead,
+    and say so explicitly in the change summary.
+  - If a bug was found via manual/browser testing (e.g. with the Playwright MCP tools), that
+    manual reproduction is not a substitute for an automated test — still add one to the suite
+    before considering the fix complete.
 
 ## End-to-end tests (Playwright, `apps/e2e`)
 
