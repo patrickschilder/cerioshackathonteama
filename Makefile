@@ -1,12 +1,14 @@
 .PHONY: start stop reset migrate seed install wait-for-services
 
+DB_URL := postgresql://cerios:cerios_dev@localhost:5432/elearning
+
 # Start the infrastructure containers and dev servers. Assumes `make install`
 # has already been run at least once (env files present, deps installed,
 # database migrated + seeded).
 start:
 	@echo "Starting infrastructure..."
 	docker compose up -d postgres keycloak-db keycloak
-	@$(MAKE) wait-for-services
+	$(MAKE) wait-for-services
 	@echo ""
 	@echo "All services running:"
 	@echo "  Keycloak:       http://localhost:8080  (admin / admin)"
@@ -24,10 +26,10 @@ wait-for-services:
 	@until docker compose exec -T keycloak /opt/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080 --realm master --user admin --password admin > /dev/null 2>&1; do sleep 3; done
 
 migrate:
-	cd packages/database && DATABASE_URL=postgresql://cerios:cerios_dev@localhost:5432/elearning npx prisma migrate dev --name init
+	cd packages/database && DATABASE_URL=$(DB_URL) npx prisma migrate dev --name init
 
 seed:
-	cd packages/database && DATABASE_URL=postgresql://cerios:cerios_dev@localhost:5432/elearning npx tsx src/seed.ts
+	cd packages/database && DATABASE_URL=$(DB_URL) npx tsx src/seed.ts
 
 # One-time (or after a `make reset`) setup: env files, npm deps, infrastructure,
 # migrations and initial seed data.
@@ -38,11 +40,11 @@ install:
 	npm install
 	@echo "Starting infrastructure for initial database setup..."
 	docker compose up -d postgres keycloak-db keycloak
-	@$(MAKE) wait-for-services
+	$(MAKE) wait-for-services
 	@echo "Running database migrations..."
-	@$(MAKE) migrate
+	$(MAKE) migrate
 	@echo "Seeding database..."
-	@$(MAKE) seed
+	$(MAKE) seed
 	@echo ""
 	@echo "Setup complete. Run 'make start' to start the app."
 
@@ -55,10 +57,10 @@ reset:
 	docker compose down -v
 	@echo "Starting infrastructure..."
 	docker compose up -d postgres keycloak-db keycloak
-	@$(MAKE) wait-for-services
+	$(MAKE) wait-for-services
 	@echo "Running database migrations..."
-	@$(MAKE) migrate
+	$(MAKE) migrate
 	@echo "Seeding database..."
-	@$(MAKE) seed
+	$(MAKE) seed
 	@echo ""
 	@echo "Database reset and reseeded. Run 'make start' to start the app."

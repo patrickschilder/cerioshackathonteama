@@ -78,14 +78,17 @@ export class QuizService {
     }
 
     async getQuiz(courseId: string, includeAnswers = false): Promise<QuizDto> {
-        const quiz = await this.prisma.quiz.findUnique({
+        let quiz = await this.prisma.quiz.findUnique({
             where: { courseId },
             include: {
                 questions: { orderBy: { index: "asc" } },
             },
         });
 
-        if (!quiz) throw new NotFoundException("Quiz not found — generate it first");
+        if (!quiz) {
+            // Auto-generate quiz on first access so students don't see an error
+            return this.generateQuiz(courseId);
+        }
 
         return {
             id: quiz.id,

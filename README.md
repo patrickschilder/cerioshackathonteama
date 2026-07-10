@@ -55,8 +55,9 @@ cp apps/admin-portal/.env.example apps/admin-portal/.env
 cp apps/student-portal/.env.example apps/student-portal/.env
 
 # Run Prisma migrations (creates all tables)
+# Note: DATABASE_URL must be set — export it first (or use the Makefile which sets it automatically)
 cd packages/database
-npx prisma migrate dev --name init
+DATABASE_URL=postgresql://cerios:cerios_dev@localhost:5432/elearning npx prisma migrate dev --name init
 cd ../..
 
 # Seed with sample data (optional but recommended)
