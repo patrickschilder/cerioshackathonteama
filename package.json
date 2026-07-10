@@ -1,0 +1,20 @@
+{
+	"name": "cerios-hackathon",
+	"version": "0.0.0",
+	"author": "Ronald Veth - Cerios",
+	"scripts": {
+		"compile": "tsc --noEmit",
+		"format": "oxfmt",
+		"format:check": "oxfmt --check",
+		"lint": "oxlint --type-aware",
+		"lint:fix": "oxlint --type-aware --fix",
+		"update-all-packages": "npm-check-updates -u && npm i"
+	},
+	"devDependencies": {
+		"@types/node": "^25.9.1",
+		"npm-check-updates": "^22.2.9",
+		"oxfmt": "^0.53.0",
+		"oxlint": "^1.68.0",
+		"oxlint-tsgolint": "^0.23.0"
+	}
+}

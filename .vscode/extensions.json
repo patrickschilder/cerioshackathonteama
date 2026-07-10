@@ -1,0 +1,9 @@
+{
+	"recommendations": [
+		"eamodio.gitlens",
+		"vscode-icons-team.vscode-icons",
+		"YoavBls.pretty-ts-errors",
+		"christian-kohler.npm-intellisense",
+		"oxc.oxc-vscode"
+	]
+}
