@@ -136,7 +136,7 @@ export function QuizTakerPage() {
                       padding: "var(--space-3)",
                       borderRadius: "var(--radius-md)",
                       border: `1.5px solid ${selected ? "var(--color-primary)" : "var(--color-border)"}`,
-                      background: selected ? "rgba(0,75,83,0.06)" : "var(--color-surface)",
+                      background: selected ? "rgba(33,43,70,0.06)" : "var(--color-surface)",
                       cursor: "pointer",
                       transition: "border-color 0.15s, background 0.15s",
                     }}

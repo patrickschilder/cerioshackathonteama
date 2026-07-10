@@ -20,7 +20,7 @@ export function CourseListPage() {
 
   return (
     <div className="container">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--space-8)" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-4)", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--space-8)" }}>
         <h1 className="page-title" style={{ margin: 0 }}>Cursussen beheren</h1>
         <Link to="/courses/new" className="btn btn-primary">+ Nieuwe cursus</Link>
       </div>

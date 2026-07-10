@@ -1,6 +1,12 @@
-import { Injectable, NotFoundException, Inject } from "@nestjs/common";
+import {
+    Injectable,
+    NotFoundException,
+    ForbiddenException,
+    Inject,
+} from "@nestjs/common";
 import type { PrismaClient } from "@cerios/database";
-import type { SlideDto } from "@cerios/shared-types";
+import type { SlideDto, UserDto } from "@cerios/shared-types";
+import type { UpdateSlideDto } from "./slides.dto.js";
 
 @Injectable()
 export class SlidesService {
@@ -38,6 +44,37 @@ export class SlidesService {
             rawText: slide.rawText,
             notes: slide.notes,
             courseId: slide.courseId,
+        };
+    }
+
+    async update(
+        courseId: string,
+        slideId: string,
+        dto: UpdateSlideDto,
+        user: UserDto,
+    ): Promise<SlideDto> {
+        const course = await this.prisma.course.findUnique({ where: { id: courseId } });
+        if (!course) throw new NotFoundException("Course not found");
+
+        if (user.role === "INSTRUCTOR" && course.instructorId !== user.id) {
+            throw new ForbiddenException("You do not own this course");
+        }
+
+        const slide = await this.prisma.slide.findFirst({ where: { id: slideId, courseId } });
+        if (!slide) throw new NotFoundException("Slide not found");
+
+        const updated = await this.prisma.slide.update({
+            where: { id: slideId },
+            data: dto,
+        });
+
+        return {
+            id: updated.id,
+            index: updated.index,
+            title: updated.title,
+            rawText: updated.rawText,
+            notes: updated.notes,
+            courseId: updated.courseId,
         };
     }
 }

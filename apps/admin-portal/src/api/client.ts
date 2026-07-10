@@ -1,5 +1,5 @@
 import keycloak from "../keycloak.js";
-import type { CourseDto, CreateCourseDto, UpdateCourseDto, SlideDto, QuizDto } from "@cerios/shared-types";
+import type { CourseDto, CreateCourseDto, UpdateCourseDto, SlideDto, UpdateSlideDto, QuizDto } from "@cerios/shared-types";
 
 const API_BASE = import.meta.env["VITE_API_URL"] ?? "http://localhost:3000";
 
@@ -61,6 +61,18 @@ export async function deleteCourse(id: string): Promise<void> {
 export async function getSlides(courseId: string): Promise<SlideDto[]> {
     const r = await authFetch(`/courses/${courseId}/slides`);
     return r.json() as Promise<SlideDto[]>;
+}
+
+export async function updateSlide(
+    courseId: string,
+    slideId: string,
+    dto: UpdateSlideDto,
+): Promise<SlideDto> {
+    const r = await authFetch(`/courses/${courseId}/slides/${slideId}`, {
+        method: "PATCH",
+        body: JSON.stringify(dto),
+    });
+    return r.json() as Promise<SlideDto>;
 }
 
 // ─── Upload ─────────────────────────────────────────────────────────────────

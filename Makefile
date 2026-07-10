@@ -23,7 +23,7 @@ wait-for-services:
 	@echo "Waiting for Postgres to be healthy..."
 	@until docker compose exec postgres pg_isready -U cerios -d elearning > /dev/null 2>&1; do sleep 1; done
 	@echo "Waiting for Keycloak to be ready (this takes ~30s)..."
-	@until docker compose exec -T keycloak /opt/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080 --realm master --user admin --password admin > /dev/null 2>&1; do sleep 3; done
+	@until MSYS_NO_PATHCONV=1 docker compose exec -T keycloak /opt/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080 --realm master --user admin --password admin > /dev/null 2>&1; do sleep 3; done
 
 migrate:
 	cd packages/database && DATABASE_URL=$(DB_URL) npx prisma migrate dev --name init

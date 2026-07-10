@@ -1,8 +1,8 @@
 /* Cerios Academy — Design Tokens
    ─────────────────────────────────
-   Primary bg:   #004B53  (dark teal-green)
-   Text/header:  #1B2430  (dark blue-grey)
-   Accent:       #F1A800  (amber/yellow-orange)
+   Primary:      #212B46  (dark navy)
+   Text/header:  #212B46  (dark navy)
+   Accent:       #66E09F  (mint/spring green)
    Surface:      #FFFFFF  (white)
 */
 
@@ -10,13 +10,13 @@
 
 :root {
     /* Brand colours */
-    --color-primary: #004b53;
-    --color-primary-dark: #003740;
-    --color-primary-light: #006672;
-    --color-accent: #f1a800;
-    --color-accent-dark: #c98c00;
-    --color-accent-light: #ffc433;
-    --color-text: #1b2430;
+    --color-primary: #212b46;
+    --color-primary-dark: #161c30;
+    --color-primary-light: #3a4870;
+    --color-accent: #66e09f;
+    --color-accent-dark: #3fb87d;
+    --color-accent-light: #b9f2d5;
+    --color-text: #212b46;
     --color-text-muted: #5a6475;
     --color-surface: #ffffff;
     --color-surface-alt: #f4f6f8;
@@ -114,6 +114,21 @@ h6 {
     max-width: var(--container-max);
     margin: 0 auto;
     padding: 0 var(--space-6);
+}
+
+.grid-2col-responsive {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 var(--space-4);
+    }
+
+    .grid-2col-responsive {
+        grid-template-columns: 1fr;
+    }
 }
 
 .sr-only {

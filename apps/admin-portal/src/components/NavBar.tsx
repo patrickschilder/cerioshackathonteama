@@ -10,8 +10,8 @@ export function NavBar() {
       <NavLink to="/" className="navbar__brand">
         <div className="navbar__logo-mark">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <rect width="20" height="20" rx="3" fill="#F1A800" />
-            <text x="4" y="15" fontSize="12" fontWeight="bold" fill="#1B2430">C</text>
+            <rect width="20" height="20" rx="3" fill="var(--color-accent)" />
+            <text x="4" y="15" fontSize="12" fontWeight="bold" fill="var(--color-text)">C</text>
           </svg>
         </div>
         <span className="navbar__logo-text">

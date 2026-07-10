@@ -24,10 +24,18 @@ export class QuizService {
         });
         if (!course) throw new NotFoundException("Course not found");
 
-        // Delete old quiz if exists
-        await this.prisma.quiz.deleteMany({ where: { courseId } });
+        // Delete old quiz if exists (attempts must go first, they FK-reference the quiz)
+        const existingQuiz = await this.prisma.quiz.findUnique({ where: { courseId } });
+        if (existingQuiz) {
+            await this.prisma.quizAttempt.deleteMany({ where: { quizId: existingQuiz.id } });
+            await this.prisma.quiz.delete({ where: { id: existingQuiz.id } });
+        }
 
         const quiz = await this.prisma.quiz.create({ data: { courseId } });
+
+        const wordPool = this.buildWordPool(
+            course.slides.map((s) => s.rawText).join(" "),
+        );
 
         const questions: Array<{
             quizId: string;
@@ -41,7 +49,7 @@ export class QuizService {
 
         let qi = 0;
         for (const slide of course.slides) {
-            const generated = this.extractQuestions(slide.rawText, slide.title);
+            const generated = this.extractQuestions(slide.rawText, slide.title, wordPool);
             for (const q of generated) {
                 questions.push({ quizId: quiz.id, index: qi++, ...q });
             }
@@ -160,9 +168,16 @@ export class QuizService {
 
     // ─── Heuristic question extraction ────────────────────────────────────────
 
+    private static readonly STOP_WORDS = new Set([
+        "this", "that", "with", "from", "have", "been", "they", "their",
+        "there", "which", "when", "where", "what", "will", "also", "each",
+        "more", "most", "some", "into", "over", "after",
+    ]);
+
     private extractQuestions(
         rawText: string,
         title: string | null,
+        wordPool: string[],
     ): Array<{
         questionText: string;
         type: "MULTIPLE_CHOICE" | "TRUE_FALSE";
@@ -179,19 +194,14 @@ export class QuizService {
         for (const sentence of sentences.slice(0, 2)) {
             const words = sentence.split(" ");
             // Pick a "key" word (noun-ish: >4 chars, not a stop word)
-            const stopWords = new Set([
-                "this", "that", "with", "from", "have", "been", "they", "their",
-                "there", "which", "when", "where", "what", "will", "also", "each",
-                "more", "most", "some", "into", "over", "after",
-            ]);
             const candidates = words.filter(
-                (w) => w.length > 4 && !stopWords.has(w.toLowerCase()),
+                (w) => w.length > 4 && !QuizService.STOP_WORDS.has(w.toLowerCase()),
             );
             if (candidates.length === 0) continue;
 
             const keyWord = candidates[Math.floor(candidates.length / 2)] ?? candidates[0]!;
             const questionText = sentence.replace(keyWord, "______") + "?";
-            const distractors = this.generateDistractors(keyWord);
+            const distractors = this.pickDistractors(keyWord, wordPool);
 
             result.push({
                 questionText: `Fill in the blank: "${questionText}"`,
@@ -216,12 +226,41 @@ export class QuizService {
         return result;
     }
 
-    private generateDistractors(word: string): string[] {
-        // Simple distractors: reverse, replace vowels, prefix
-        const reversed = word.split("").reverse().join("");
-        const noVowels = word.replace(/[aeiou]/gi, "o");
-        const prefixed = `un${word}`;
-        return [reversed, noVowels, prefixed].filter((d) => d !== word).slice(0, 3);
+    /**
+     * Build a pool of real, properly-spelled candidate words from the course
+     * material so distractors look like plausible answers instead of garbled
+     * text (which previously made the correct answer obvious by being the
+     * only normally-spelled option).
+     */
+    private buildWordPool(text: string): string[] {
+        const words = text
+            .split(/\s+/)
+            .map((w) => w.replace(/[^a-zA-Z]/g, ""))
+            .filter((w) => w.length > 4 && !QuizService.STOP_WORDS.has(w.toLowerCase()));
+        return Array.from(new Set(words));
+    }
+
+    private pickDistractors(correctWord: string, wordPool: string[]): string[] {
+        const fallbackPool = [
+            "Concept", "Overview", "Summary", "Detail", "Example", "Process",
+            "Method", "Structure", "Element", "Feature",
+        ];
+        const candidates = wordPool.filter(
+            (w) => w.toLowerCase() !== correctWord.toLowerCase(),
+        );
+        const distractors = this.shuffle(candidates).slice(0, 3);
+
+        for (const fallback of fallbackPool) {
+            if (distractors.length >= 3) break;
+            const alreadyUsed = distractors.some(
+                (d) => d.toLowerCase() === fallback.toLowerCase(),
+            );
+            if (!alreadyUsed && fallback.toLowerCase() !== correctWord.toLowerCase()) {
+                distractors.push(fallback);
+            }
+        }
+
+        return distractors;
     }
 
     private shuffle<T>(arr: T[]): T[] {

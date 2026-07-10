@@ -51,6 +51,12 @@ export interface SlideDto {
     courseId: string;
 }
 
+export interface UpdateSlideDto {
+    title?: string;
+    rawText?: string;
+    notes?: string;
+}
+
 // ─── Quiz ─────────────────────────────────────────────────────────────────────
 
 export interface QuizQuestionDto {

@@ -142,6 +142,25 @@
     box-shadow: var(--shadow-md);
 }
 
+@media (max-width: 640px) {
+    .navbar {
+        height: auto;
+        min-height: var(--nav-height);
+        flex-wrap: wrap;
+        padding: var(--space-3) var(--space-4);
+        gap: var(--space-2);
+    }
+
+    .navbar__spacer {
+        display: none;
+    }
+
+    .navbar__nav {
+        order: 3;
+        width: 100%;
+    }
+}
+
 .navbar__brand {
     display: flex;
     align-items: center;
@@ -254,7 +273,7 @@
 .form-textarea:focus,
 .form-select:focus {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(0, 75, 83, 0.15);
+    box-shadow: 0 0 0 3px rgba(33, 43, 70, 0.15);
 }
 
 .form-textarea {

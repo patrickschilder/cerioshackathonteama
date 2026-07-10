@@ -7,3 +7,4 @@ apps/api-elearning/uploads/
 apps/*/dist/
 packages/*/dist/
 .DS_Store
+.playwright-mcp/
