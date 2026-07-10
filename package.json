@@ -19,10 +19,12 @@
 		"dev:student": "npm run dev --workspace=apps/student-portal",
 		"db:generate": "npm run generate --workspace=packages/database",
 		"db:migrate": "npm run migrate --workspace=packages/database",
-		"db:seed": "npm run seed --workspace=packages/database"
+		"db:seed": "npm run seed --workspace=packages/database",
+		"stop:servers": "kill-port 3000 5173 5174"
 	},
 	"devDependencies": {
 		"@types/node": "^25.9.1",
+		"kill-port": "^2.0.1",
 		"npm-check-updates": "^22.2.9",
 		"oxfmt": "^0.53.0",
 		"oxlint": "^1.68.0",

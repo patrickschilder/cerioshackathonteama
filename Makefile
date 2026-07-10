@@ -48,8 +48,7 @@ install:
 
 stop:
 	docker compose down
-	@pkill -f "nest start" || true
-	@pkill -f "vite" || true
+	@npm run stop:servers --if-present 2>/dev/null || true
 
 # Wipe all data and reseed with fresh sample data.
 reset:
