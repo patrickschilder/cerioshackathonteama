@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "build": "nest build",
+        "predev": "nest build",
         "dev": "nest start --watch",
         "start": "node dist/main",
         "compile": "tsc --noEmit -p tsconfig.json",

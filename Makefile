@@ -2,15 +2,15 @@
 
 start: install
 	@echo "Starting infrastructure..."
-	docker compose up -d postgres keycloak
+	docker compose up -d postgres keycloak-db keycloak
 	@echo "Waiting for Postgres to be healthy..."
 	@until docker compose exec postgres pg_isready -U cerios -d elearning > /dev/null 2>&1; do sleep 1; done
-	@echo "Waiting for Keycloak to be ready..."
-	@until curl -sf http://localhost:8080/health/ready > /dev/null 2>&1; do sleep 2; done
+	@echo "Waiting for Keycloak to be ready (this takes ~30s)..."
+	@until docker compose exec -T keycloak /opt/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080 --realm master --user admin --password admin > /dev/null 2>&1; do sleep 3; done
 	@echo "Running database migrations..."
-	cd packages/database && npx prisma migrate deploy
+	cd packages/database && DATABASE_URL=postgresql://cerios:cerios_dev@localhost:5432/elearning npx prisma migrate dev --name init
 	@echo "Seeding database..."
-	npm run db:seed
+	cd packages/database && DATABASE_URL=postgresql://cerios:cerios_dev@localhost:5432/elearning npx tsx src/seed.ts
 	@echo ""
 	@echo "All services running:"
 	@echo "  Keycloak:       http://localhost:8080  (admin / admin)"

@@ -2,6 +2,17 @@
 
 Full-stack TypeScript monorepo. React + Vite frontends, NestJS API, Prisma + PostgreSQL, Keycloak authentication.
 
+## Application URLs
+
+| Service | URL | Credentials |
+|---|---|---|
+| Student portal | http://localhost:5173 | `student-user` / `student123` |
+| Admin portal | http://localhost:5174 | `instructor-user` / `instructor123` |
+| REST API | http://localhost:3000 | — |
+| Keycloak admin | http://localhost:8080 | `admin` / `admin` |
+
+---
+
 ## Prerequisites
 
 - [Node.js 22+](https://nodejs.org/)
