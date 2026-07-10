@@ -39,3 +39,65 @@ jobs:
 
       - name: Validate
         run: npx @arethetypeswrong/cli --pack . --ignore-rules=no-resolution
+
+  e2e:
+    name: E2E
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    env:
+      DATABASE_URL: postgresql://cerios:cerios_dev@localhost:5432/elearning
+      KEYCLOAK_REALM_URL: http://localhost:8080/realms/elearning
+      PORT: 3000
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start Postgres and Keycloak
+        run: docker compose up -d --wait --wait-timeout 180 postgres keycloak-db keycloak
+
+      - name: Run database migrations
+        run: npm run migrate:deploy --workspace=packages/database
+
+      - name: Seed database
+        run: npm run seed --workspace=packages/database
+
+      - name: Start API and portal dev servers
+        run: |
+          npm run dev:api > /tmp/api.log 2>&1 &
+          npm run dev:admin > /tmp/admin.log 2>&1 &
+          npm run dev:student > /tmp/student.log 2>&1 &
+          for port in 3000 5174 5173; do
+            echo "Waiting for port $port..."
+            for i in $(seq 1 60); do
+              nc -z localhost "$port" && break
+              sleep 2
+            done
+          done
+
+      - name: Install Playwright browsers
+        working-directory: apps/e2e
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/e2e/playwright-report/
+          retention-days: 7
+
+      - name: Stop dev servers and containers
+        if: always()
+        run: |
+          npm run stop:servers --if-present || true
+          docker compose down -v
