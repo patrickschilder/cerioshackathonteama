@@ -5,7 +5,7 @@ async function seed() {
 
     // Seed users (in production these come from Keycloak; this is for local dev)
     const admin = await prisma.user.upsert({
-        where: { keycloakId: "admin-keycloak-id" },
+        where: { email: "admin@cerios.nl" },
         update: {},
         create: {
             keycloakId: "admin-keycloak-id",
@@ -17,7 +17,7 @@ async function seed() {
     });
 
     const instructor = await prisma.user.upsert({
-        where: { keycloakId: "instructor-keycloak-id" },
+        where: { email: "instructor@cerios.nl" },
         update: {},
         create: {
             keycloakId: "instructor-keycloak-id",
@@ -29,7 +29,7 @@ async function seed() {
     });
 
     const student = await prisma.user.upsert({
-        where: { keycloakId: "student-keycloak-id" },
+        where: { email: "student@cerios.nl" },
         update: {},
         create: {
             keycloakId: "student-keycloak-id",
