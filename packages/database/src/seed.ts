@@ -1,5 +1,9 @@
 import { prisma, Role } from "./index.js";
 
+process.on('unhandledRejection', (reason) => {
+    console.error('Full error:', JSON.stringify(reason, null, 2));
+});
+
 async function seed() {
     console.log("Seeding database...");
 
