@@ -266,7 +266,8 @@ async function seed(): Promise<void> {
 		{
 			id: "seed-course-omnext",
 			title: "Omnext: Software Quality Analysis for Mendix & Boomi",
-			description: "Learn how Omnext makes software quality measurable, automated and transparent for Mendix and Boomi.",
+			description:
+				"Learn how Omnext makes software quality measurable, automated and transparent for Mendix and Boomi.",
 			slides: [
 				{
 					index: 0,
@@ -344,7 +345,8 @@ async function seed(): Promise<void> {
 		{
 			id: "seed-course-testmonitor",
 			title: "TestMonitor: All-in-One Test Management",
-			description: "Learn how TestMonitor brings requirements, test design, test runs and incident management together.",
+			description:
+				"Learn how TestMonitor brings requirements, test design, test runs and incident management together.",
 			slides: [
 				{
 					index: 0,
