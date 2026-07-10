@@ -8,6 +8,8 @@
 		"packages/*"
 	],
 	"scripts": {
+		"postinstall": "npm run build:packages",
+		"build:packages": "npm run build --workspace=packages/shared-types && npm run build --workspace=packages/database",
 		"compile": "tsc --noEmit",
 		"format": "oxfmt",
 		"format:check": "oxfmt --check",
