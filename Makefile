@@ -7,7 +7,6 @@ DB_URL := postgresql://cerios:cerios_dev@localhost:5432/elearning
 # database migrated + seeded).
 start:
 	@echo "Starting infrastructure..."
-	docker compose up -d postgres keycloak-db keycloak
 	$(MAKE) wait-for-services
 	@echo ""
 	@echo "All services running:"
@@ -20,10 +19,8 @@ start:
 	npm run dev:api & npm run dev:admin & npm run dev:student & wait
 
 wait-for-services:
-	@echo "Waiting for Postgres to be healthy..."
-	@until docker compose exec postgres pg_isready -U cerios -d elearning > /dev/null 2>&1; do sleep 1; done
-	@echo "Waiting for Keycloak to be ready (this takes ~30s)..."
-	@until MSYS_NO_PATHCONV=1 docker compose exec -T keycloak /opt/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080 --realm master --user admin --password admin > /dev/null 2>&1; do sleep 3; done
+	@echo "Waiting for Postgres, Keycloak DB, and Keycloak to become healthy (up to 3 minutes)..."
+	docker compose up -d --wait --wait-timeout 180 postgres keycloak-db keycloak
 
 migrate:
 	cd packages/database && DATABASE_URL=$(DB_URL) npx prisma migrate dev --name init
@@ -39,7 +36,6 @@ install:
 	@if [ ! -f apps/student-portal/.env ]; then cp apps/student-portal/.env.example apps/student-portal/.env; fi
 	npm install
 	@echo "Starting infrastructure for initial database setup..."
-	docker compose up -d postgres keycloak-db keycloak
 	$(MAKE) wait-for-services
 	@echo "Running database migrations..."
 	$(MAKE) migrate
@@ -56,7 +52,6 @@ stop:
 reset:
 	docker compose down -v
 	@echo "Starting infrastructure..."
-	docker compose up -d postgres keycloak-db keycloak
 	$(MAKE) wait-for-services
 	@echo "Running database migrations..."
 	$(MAKE) migrate
