@@ -1,0 +1,138 @@
+// This is your Prisma schema file
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  keycloakId  String   @unique
+  email       String   @unique
+  firstName   String
+  lastName    String
+  role        Role     @default(STUDENT)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  enrollments Enrollment[]
+  progress    Progress[]
+  quizAttempts QuizAttempt[]
+  courses     Course[]      @relation("InstructorCourses")
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  instructorId String
+  instructor   User   @relation("InstructorCourses", fields: [instructorId], references: [id])
+
+  slides      Slide[]
+  enrollments Enrollment[]
+  quiz        Quiz?
+}
+
+model Slide {
+  id        String   @id @default(cuid())
+  index     Int
+  title     String?
+  rawText   String
+  notes     String?
+  createdAt DateTime @default(now())
+
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  progress  Progress[]
+
+  @@unique([courseId, index])
+}
+
+model Enrollment {
+  id         String   @id @default(cuid())
+  enrolledAt DateTime @default(now())
+
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+}
+
+model Progress {
+  id        String   @id @default(cuid())
+  viewedAt  DateTime @default(now())
+
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
+  slideId  String
+  slide    Slide  @relation(fields: [slideId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, slideId])
+}
+
+model Quiz {
+  id        String     @id @default(cuid())
+  createdAt DateTime   @default(now())
+
+  courseId  String     @unique
+  course    Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  questions QuizQuestion[]
+  attempts  QuizAttempt[]
+}
+
+model QuizQuestion {
+  id            String   @id @default(cuid())
+  index         Int
+  questionText  String
+  type          QuestionType @default(MULTIPLE_CHOICE)
+  options       Json     // string[]
+  correctAnswer String
+  explanation   String?
+
+  quizId String
+  quiz   Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
+
+model QuizAttempt {
+  id          String      @id @default(cuid())
+  score       Int
+  totalPoints Int
+  answers     Json        // Record<questionId, answer>
+  status      QuizStatus  @default(COMPLETED)
+  attemptedAt DateTime    @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  quizId String
+  quiz   Quiz   @relation(fields: [quizId], references: [id])
+}
+
+enum Role {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}
+
+enum QuizStatus {
+  COMPLETED
+  PASSED
+  FAILED
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  TRUE_FALSE
+}

@@ -1,0 +1,46 @@
+import React from "react";
+import { NavLink } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth.js";
+
+export function NavBar() {
+  const { userRoles, logout } = useAuth();
+
+  return (
+    <nav className="navbar">
+      <NavLink to="/" className="navbar__brand">
+        <div className="navbar__logo-mark">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect width="20" height="20" rx="3" fill="#F1A800" />
+            <text x="4" y="15" fontSize="12" fontWeight="bold" fill="#1B2430">C</text>
+          </svg>
+        </div>
+        <span className="navbar__logo-text">
+          Cerios <span>Academy</span>
+        </span>
+      </NavLink>
+
+      <div className="navbar__spacer" />
+
+      <ul className="navbar__nav">
+        <li>
+          <NavLink to="/" className={({ isActive }) => `navbar__link${isActive ? " navbar__link--active" : ""}`} end>
+            Cursussen
+          </NavLink>
+        </li>
+      </ul>
+
+      <div className="navbar__user">
+        <div className="navbar__avatar">
+          {userRoles.includes("admin") ? "A" : userRoles.includes("instructor") ? "I" : "?"}
+        </div>
+        <button
+          onClick={logout}
+          className="btn btn-ghost btn-sm"
+          style={{ color: "rgba(255,255,255,0.8)", borderColor: "rgba(255,255,255,0.3)" }}
+        >
+          Uitloggen
+        </button>
+      </div>
+    </nav>
+  );
+}

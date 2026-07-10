@@ -1,2 +1,9 @@
 # Node
 node_modules/
+dist/
+.env
+.env.local
+apps/api-elearning/uploads/
+apps/*/dist/
+packages/*/dist/
+.DS_Store

@@ -2,13 +2,24 @@
 	"name": "cerios-hackathon",
 	"version": "0.0.0",
 	"author": "Ronald Veth - Cerios",
+	"private": true,
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
 	"scripts": {
 		"compile": "tsc --noEmit",
 		"format": "oxfmt",
 		"format:check": "oxfmt --check",
 		"lint": "oxlint --type-aware",
 		"lint:fix": "oxlint --type-aware --fix",
-		"update-all-packages": "npm-check-updates -u && npm i"
+		"update-all-packages": "npm-check-updates -u && npm i",
+		"dev:api": "npm run dev --workspace=apps/api-elearning",
+		"dev:admin": "npm run dev --workspace=apps/admin-portal",
+		"dev:student": "npm run dev --workspace=apps/student-portal",
+		"db:generate": "npm run generate --workspace=packages/database",
+		"db:migrate": "npm run migrate --workspace=packages/database",
+		"db:seed": "npm run seed --workspace=packages/database"
 	},
 	"devDependencies": {
 		"@types/node": "^25.9.1",
@@ -16,5 +27,14 @@
 		"oxfmt": "^0.53.0",
 		"oxlint": "^1.68.0",
 		"oxlint-tsgolint": "^0.24.0"
+	},
+	"allowScripts": {
+		"@prisma/client@5.22.0": true,
+		"prisma@5.22.0": true,
+		"@prisma/engines@5.22.0": true,
+		"esbuild@0.28.1": true,
+		"esbuild@0.25.12": true,
+		"@nestjs/core@10.4.22": true,
+		"fsevents@2.3.3": true
 	}
 }
