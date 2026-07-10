@@ -1,6 +1,7 @@
 ---
 description: "Use when implementing, refactoring, or reviewing changes. Enforces the validation checkpoint workflow for hackathon development."
 ---
+
 # Validation Workflow
 
 - After each meaningful implementation checkpoint, run `npm run lint`.

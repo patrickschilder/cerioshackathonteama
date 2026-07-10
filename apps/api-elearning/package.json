@@ -1,42 +1,42 @@
 {
-    "name": "@cerios/api-elearning",
-    "version": "0.0.0",
-    "private": true,
-    "scripts": {
-        "build": "nest build",
-        "predev": "nest build",
-        "dev": "nest start --watch",
-        "start": "node dist/main",
-        "compile": "tsc --noEmit -p tsconfig.json",
-        "lint": "oxlint --type-aware src",
-        "test": "vitest run"
-    },
-    "dependencies": {
-        "@cerios/database": "*",
-        "@cerios/shared-types": "*",
-        "@nestjs/common": "^10.4.0",
-        "@nestjs/core": "^10.4.0",
-        "@nestjs/jwt": "^10.2.0",
-        "@nestjs/passport": "^10.0.3",
-        "@nestjs/platform-express": "^10.4.0",
-        "class-transformer": "^0.5.1",
-        "class-validator": "^0.14.1",
-        "dotenv": "^16.6.1",
-        "jwks-rsa": "^3.1.0",
-        "multer": "^2.0.0",
-        "officeparser": "^5.0.0",
-        "passport": "^0.7.0",
-        "passport-jwt": "^4.0.1",
-        "reflect-metadata": "^0.2.2",
-        "rxjs": "^7.8.1"
-    },
-    "devDependencies": {
-        "@nestjs/cli": "^10.4.0",
-        "@nestjs/schematics": "^10.2.0",
-        "@types/multer": "^1.4.12",
-        "@types/node": "^25.9.1",
-        "@types/passport-jwt": "^4.0.1",
-        "typescript": "^5.7.0",
-        "vitest": "^3.2.0"
-    }
+	"name": "@cerios/api-elearning",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"build": "nest build",
+		"compile": "tsc --noEmit -p tsconfig.json",
+		"dev": "nest start --watch",
+		"lint": "oxlint --type-aware src",
+		"predev": "nest build",
+		"start": "node dist/main",
+		"test": "vitest run"
+	},
+	"dependencies": {
+		"@cerios/database": "*",
+		"@cerios/shared-types": "*",
+		"@nestjs/common": "^10.4.0",
+		"@nestjs/core": "^10.4.0",
+		"@nestjs/jwt": "^10.2.0",
+		"@nestjs/passport": "^10.0.3",
+		"@nestjs/platform-express": "^10.4.0",
+		"class-transformer": "^0.5.1",
+		"class-validator": "^0.14.1",
+		"dotenv": "^16.6.1",
+		"jwks-rsa": "^3.1.0",
+		"multer": "^2.0.0",
+		"officeparser": "^5.0.0",
+		"passport": "^0.7.0",
+		"passport-jwt": "^4.0.1",
+		"reflect-metadata": "^0.2.2",
+		"rxjs": "^7.8.1"
+	},
+	"devDependencies": {
+		"@nestjs/cli": "^10.4.0",
+		"@nestjs/schematics": "^10.2.0",
+		"@types/multer": "^1.4.12",
+		"@types/node": "^25.9.1",
+		"@types/passport-jwt": "^4.0.1",
+		"typescript": "^5.7.0",
+		"vitest": "^3.2.0"
+	}
 }

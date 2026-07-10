@@ -2,6 +2,7 @@
 description: "Use when adding NestJS endpoints, modules, controllers, services, auth logic, or request and response types in the API apps."
 applyTo: "apps/api-*/**"
 ---
+
 # Backend Guidance
 
 - Follow NestJS structure: module, controller, service, and DTO boundaries.

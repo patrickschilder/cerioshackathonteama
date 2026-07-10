@@ -1,6 +1,6 @@
-import { describe, expect, it, vi } from "vitest";
-import { NotFoundException } from "@nestjs/common";
 import type { PrismaClient } from "@cerios/database";
+import { NotFoundException } from "@nestjs/common";
+import { describe, expect, it, vi } from "vitest";
 
 import { QuizService } from "./quiz.service.js";
 
@@ -49,9 +49,7 @@ describe("QuizService", () => {
 	describe("buildWordPool", () => {
 		it("keeps only real words longer than 4 letters, excluding stop words", () => {
 			const service = new QuizService(makePrisma());
-			const pool = asInternals(service).buildWordPool(
-				"There is a wonderful concept about which we learn today.",
-			);
+			const pool = asInternals(service).buildWordPool("There is a wonderful concept about which we learn today.");
 
 			expect(pool).toContain("wonderful");
 			expect(pool).toContain("concept");

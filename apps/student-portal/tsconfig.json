@@ -1,17 +1,17 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "jsx": "react-jsx",
-    "noEmit": true,
-    "paths": {
-      "@cerios/shared-types": ["../../packages/shared-types/src/index.ts"],
-      "@cerios/ui-theme": ["../../packages/ui-theme/src/index.ts"],
-      "@cerios/ui-theme/theme.css": ["../../packages/ui-theme/src/theme.css"]
-    }
-  },
-  "include": ["src"]
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"target": "ES2020",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"lib": ["ES2020", "DOM", "DOM.Iterable"],
+		"jsx": "react-jsx",
+		"noEmit": true,
+		"paths": {
+			"@cerios/shared-types": ["../../packages/shared-types/src/index.ts"],
+			"@cerios/ui-theme": ["../../packages/ui-theme/src/index.ts"],
+			"@cerios/ui-theme/theme.css": ["../../packages/ui-theme/src/theme.css"]
+		}
+	},
+	"include": ["src"]
 }

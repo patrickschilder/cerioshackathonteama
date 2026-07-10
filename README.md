@@ -4,12 +4,12 @@ Full-stack TypeScript monorepo. React + Vite frontends, NestJS API, Prisma + Pos
 
 ## Application URLs
 
-| Service | URL | Credentials |
-|---|---|---|
-| Student portal | http://localhost:5173 | `student-user` / `student123` |
-| Admin portal | http://localhost:5174 | `instructor-user` / `instructor123` |
-| REST API | http://localhost:3000 | — |
-| Keycloak admin | http://localhost:8080 | `admin` / `admin` |
+| Service        | URL                   | Credentials                         |
+| -------------- | --------------------- | ----------------------------------- |
+| Student portal | http://localhost:5173 | `student-user` / `student123`       |
+| Admin portal   | http://localhost:5174 | `instructor-user` / `instructor123` |
+| REST API       | http://localhost:3000 | —                                   |
+| Keycloak admin | http://localhost:8080 | `admin` / `admin`                   |
 
 ---
 
@@ -71,16 +71,19 @@ npm run db:seed
 Open **three terminals**:
 
 **Terminal 1 — API** (http://localhost:3000)
+
 ```bash
 npm run dev:api
 ```
 
 **Terminal 2 — Admin portal** (http://localhost:5174)
+
 ```bash
 npm run dev:admin
 ```
 
 **Terminal 3 — Student portal** (http://localhost:5173)
+
 ```bash
 npm run dev:student
 ```
@@ -89,11 +92,11 @@ npm run dev:student
 
 ## 5. Log in
 
-| Portal | URL | Username | Password | Role |
-|---|---|---|---|---|
-| Admin | http://localhost:5174 | `admin-user` | `admin123` | Admin |
-| Admin | http://localhost:5174 | `instructor-user` | `instructor123` | Instructor |
-| Student | http://localhost:5173 | `student-user` | `student123` | Student |
+| Portal  | URL                   | Username          | Password        | Role       |
+| ------- | --------------------- | ----------------- | --------------- | ---------- |
+| Admin   | http://localhost:5174 | `admin-user`      | `admin123`      | Admin      |
+| Admin   | http://localhost:5174 | `instructor-user` | `instructor123` | Instructor |
+| Student | http://localhost:5173 | `student-user`    | `student123`    | Student    |
 
 ---
 
@@ -162,17 +165,17 @@ docker compose down -v
 
 All endpoints require a Bearer token from Keycloak.
 
-| Method | Path | Role | Description |
-|---|---|---|---|
-| GET | `/users/me` | any | Current user info |
-| GET | `/courses` | any | List courses |
-| POST | `/courses` | instructor/admin | Create course |
-| PATCH | `/courses/:id` | instructor/admin | Update course |
-| DELETE | `/courses/:id` | instructor/admin | Delete course |
-| GET | `/courses/:id/slides` | any | List slides |
-| POST | `/courses/:id/upload/pptx` | instructor/admin | Upload .pptx |
-| POST | `/courses/:id/quiz/generate` | instructor/admin | Generate quiz |
-| GET | `/courses/:id/quiz` | any | Get quiz questions |
-| POST | `/courses/:id/quiz/submit` | student | Submit quiz answers |
-| GET | `/courses/:id/progress` | any | Get progress % |
-| POST | `/courses/:id/progress/slides/:slideId/view` | any | Mark slide viewed |
+| Method | Path                                         | Role             | Description         |
+| ------ | -------------------------------------------- | ---------------- | ------------------- |
+| GET    | `/users/me`                                  | any              | Current user info   |
+| GET    | `/courses`                                   | any              | List courses        |
+| POST   | `/courses`                                   | instructor/admin | Create course       |
+| PATCH  | `/courses/:id`                               | instructor/admin | Update course       |
+| DELETE | `/courses/:id`                               | instructor/admin | Delete course       |
+| GET    | `/courses/:id/slides`                        | any              | List slides         |
+| POST   | `/courses/:id/upload/pptx`                   | instructor/admin | Upload .pptx        |
+| POST   | `/courses/:id/quiz/generate`                 | instructor/admin | Generate quiz       |
+| GET    | `/courses/:id/quiz`                          | any              | Get quiz questions  |
+| POST   | `/courses/:id/quiz/submit`                   | student          | Submit quiz answers |
+| GET    | `/courses/:id/progress`                      | any              | Get progress %      |
+| POST   | `/courses/:id/progress/slides/:slideId/view` | any              | Mark slide viewed   |

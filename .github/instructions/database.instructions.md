@@ -2,6 +2,7 @@
 description: "Use when editing Prisma schema, adding migrations, changing PostgreSQL data models, or implementing seed and database access logic."
 applyTo: "packages/database/**"
 ---
+
 # Database Guidance
 
 - Use Prisma as the default database access layer.

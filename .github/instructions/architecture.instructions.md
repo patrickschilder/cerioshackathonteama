@@ -1,6 +1,7 @@
 ---
 description: "Use when designing features, scaffolding new modules, or deciding where code belongs in the monorepo. Covers architecture, boundaries, and package placement."
 ---
+
 # Monorepo Architecture Guidance
 
 - Use a TypeScript monorepo with a clear split between frontend apps, backend apps, shared packages, and the database package.

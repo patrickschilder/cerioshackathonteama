@@ -1,14 +1,14 @@
 {
-    "name": "@cerios/e2e",
-    "version": "0.0.0",
-    "private": true,
-    "scripts": {
-        "test:e2e": "playwright test",
-        "test:e2e:ui": "playwright test --ui"
-    },
-    "devDependencies": {
-        "@playwright/test": "^1.49.0",
-        "@types/node": "^25.9.1",
-        "typescript": "^5.7.0"
-    }
+	"name": "@cerios/e2e",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"test:e2e": "playwright test",
+		"test:e2e:ui": "playwright test --ui"
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.49.0",
+		"@types/node": "^25.9.1",
+		"typescript": "^5.7.0"
+	}
 }

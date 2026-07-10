@@ -1,33 +1,33 @@
 {
-    "name": "@cerios/admin-portal",
-    "version": "0.0.0",
-    "private": true,
-    "type": "module",
-    "scripts": {
-        "dev": "vite --port 5174",
-        "build": "tsc && vite build",
-        "preview": "vite preview",
-        "compile": "tsc --noEmit",
-        "lint": "oxlint --type-aware src",
-        "test": "vitest run"
-    },
-    "dependencies": {
-        "@cerios/shared-types": "*",
-        "@cerios/ui-theme": "*",
-        "keycloak-js": "^24.0.5",
-        "react": "^19.0.0",
-        "react-dom": "^19.0.0",
-        "react-router-dom": "^7.0.0"
-    },
-    "devDependencies": {
-        "@testing-library/jest-dom": "^6.6.0",
-        "@testing-library/react": "^16.0.0",
-        "@types/react": "^19.0.0",
-        "@types/react-dom": "^19.0.0",
-        "@vitejs/plugin-react": "^4.3.0",
-        "jsdom": "^25.0.0",
-        "typescript": "^5.7.0",
-        "vite": "^6.0.0",
-        "vitest": "^3.2.0"
-    }
+	"name": "@cerios/admin-portal",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "tsc && vite build",
+		"compile": "tsc --noEmit",
+		"dev": "vite --port 5174",
+		"lint": "oxlint --type-aware src",
+		"preview": "vite preview",
+		"test": "vitest run"
+	},
+	"dependencies": {
+		"@cerios/shared-types": "*",
+		"@cerios/ui-theme": "*",
+		"keycloak-js": "^24.0.5",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"react-router-dom": "^7.0.0"
+	},
+	"devDependencies": {
+		"@testing-library/jest-dom": "^6.6.0",
+		"@testing-library/react": "^16.0.0",
+		"@types/react": "^19.0.0",
+		"@types/react-dom": "^19.0.0",
+		"@vitejs/plugin-react": "^4.3.0",
+		"jsdom": "^25.0.0",
+		"typescript": "^5.7.0",
+		"vite": "^6.0.0",
+		"vitest": "^3.2.0"
+	}
 }

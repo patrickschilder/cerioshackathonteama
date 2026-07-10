@@ -1,7 +1,7 @@
-import { describe, expect, it, vi } from "vitest";
-import { ForbiddenException, NotFoundException } from "@nestjs/common";
 import type { PrismaClient } from "@cerios/database";
 import type { UserDto } from "@cerios/shared-types";
+import { ForbiddenException, NotFoundException } from "@nestjs/common";
+import { describe, expect, it, vi } from "vitest";
 
 import { CoursesService } from "./courses.service.js";
 
@@ -59,9 +59,7 @@ describe("CoursesService", () => {
 
 			await service.findAll(makeUser({ role: "STUDENT" }));
 
-			expect(findMany).toHaveBeenCalledWith(
-				expect.objectContaining({ where: { published: true } }),
-			);
+			expect(findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { published: true } }));
 		});
 
 		it("filters to owned courses only for an instructor", async () => {
@@ -70,9 +68,7 @@ describe("CoursesService", () => {
 
 			await service.findAll(makeUser({ role: "INSTRUCTOR", id: "instructor-1" }));
 
-			expect(findMany).toHaveBeenCalledWith(
-				expect.objectContaining({ where: { instructorId: "instructor-1" } }),
-			);
+			expect(findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { instructorId: "instructor-1" } }));
 		});
 
 		it("applies no filter for an admin", async () => {
@@ -90,41 +86,30 @@ describe("CoursesService", () => {
 			const findUnique = vi.fn().mockResolvedValue(null);
 			const service = new CoursesService(makePrisma({ course: { findUnique } }));
 
-			await expect(service.findOne("missing", makeUser())).rejects.toThrow(
-				NotFoundException,
-			);
+			await expect(service.findOne("missing", makeUser())).rejects.toThrow(NotFoundException);
 		});
 
 		it("throws ForbiddenException when a student requests an unpublished course", async () => {
 			const findUnique = vi.fn().mockResolvedValue(makeCourseRow({ published: false }));
 			const service = new CoursesService(makePrisma({ course: { findUnique } }));
 
-			await expect(
-				service.findOne("course-1", makeUser({ role: "STUDENT" })),
-			).rejects.toThrow(ForbiddenException);
+			await expect(service.findOne("course-1", makeUser({ role: "STUDENT" }))).rejects.toThrow(ForbiddenException);
 		});
 
 		it("throws ForbiddenException when an instructor requests a course they do not own", async () => {
-			const findUnique = vi
-				.fn()
-				.mockResolvedValue(makeCourseRow({ instructorId: "other-instructor" }));
+			const findUnique = vi.fn().mockResolvedValue(makeCourseRow({ instructorId: "other-instructor" }));
 			const service = new CoursesService(makePrisma({ course: { findUnique } }));
 
-			await expect(
-				service.findOne("course-1", makeUser({ role: "INSTRUCTOR", id: "instructor-1" })),
-			).rejects.toThrow(ForbiddenException);
+			await expect(service.findOne("course-1", makeUser({ role: "INSTRUCTOR", id: "instructor-1" }))).rejects.toThrow(
+				ForbiddenException
+			);
 		});
 
 		it("returns the course for its owning instructor", async () => {
-			const findUnique = vi
-				.fn()
-				.mockResolvedValue(makeCourseRow({ instructorId: "instructor-1" }));
+			const findUnique = vi.fn().mockResolvedValue(makeCourseRow({ instructorId: "instructor-1" }));
 			const service = new CoursesService(makePrisma({ course: { findUnique } }));
 
-			const result = await service.findOne(
-				"course-1",
-				makeUser({ role: "INSTRUCTOR", id: "instructor-1" }),
-			);
+			const result = await service.findOne("course-1", makeUser({ role: "INSTRUCTOR", id: "instructor-1" }));
 
 			expect(result.id).toBe("course-1");
 			expect(result.slideCount).toBe(2);
@@ -136,20 +121,16 @@ describe("CoursesService", () => {
 			const findUnique = vi.fn().mockResolvedValue(null);
 			const service = new CoursesService(makePrisma({ course: { findUnique } }));
 
-			await expect(service.remove("missing", makeUser({ role: "ADMIN" }))).rejects.toThrow(
-				NotFoundException,
-			);
+			await expect(service.remove("missing", makeUser({ role: "ADMIN" }))).rejects.toThrow(NotFoundException);
 		});
 
 		it("throws ForbiddenException when an instructor tries to delete a course they do not own", async () => {
-			const findUnique = vi
-				.fn()
-				.mockResolvedValue(makeCourseRow({ instructorId: "other-instructor" }));
+			const findUnique = vi.fn().mockResolvedValue(makeCourseRow({ instructorId: "other-instructor" }));
 			const service = new CoursesService(makePrisma({ course: { findUnique } }));
 
-			await expect(
-				service.remove("course-1", makeUser({ role: "INSTRUCTOR", id: "instructor-1" })),
-			).rejects.toThrow(ForbiddenException);
+			await expect(service.remove("course-1", makeUser({ role: "INSTRUCTOR", id: "instructor-1" }))).rejects.toThrow(
+				ForbiddenException
+			);
 		});
 	});
 });

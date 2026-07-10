@@ -2,6 +2,7 @@
 description: "Use when building frontend pages, React components, routes, forms, or frontend API integration in the app layer."
 applyTo: "apps/*-portal/**"
 ---
+
 # Frontend Guidance
 
 - Match the current frontend stack: React, TypeScript, and Vite.

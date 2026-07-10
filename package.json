@@ -1,30 +1,30 @@
 {
 	"name": "cerios-hackathon",
 	"version": "0.0.0",
-	"author": "Ronald Veth - Cerios",
 	"private": true,
+	"author": "Ronald Veth - Cerios",
 	"workspaces": [
 		"apps/*",
 		"packages/*"
 	],
 	"scripts": {
-		"postinstall": "npm run build:packages",
 		"build:packages": "npm run build --workspace=packages/shared-types && npm run build --workspace=packages/database",
 		"compile": "tsc --noEmit",
+		"db:generate": "npm run generate --workspace=packages/database",
+		"db:migrate": "npm run migrate --workspace=packages/database",
+		"db:seed": "npm run seed --workspace=packages/database",
+		"dev:admin": "npm run dev --workspace=apps/admin-portal",
+		"dev:api": "npm run dev --workspace=apps/api-elearning",
+		"dev:student": "npm run dev --workspace=apps/student-portal",
 		"format": "oxfmt",
 		"format:check": "oxfmt --check",
 		"lint": "oxlint --type-aware",
 		"lint:fix": "oxlint --type-aware --fix",
+		"postinstall": "npm run build:packages",
+		"stop:servers": "kill-port 3000 5173 5174",
 		"test": "npm run test --workspaces --if-present",
 		"test:e2e": "npm run test:e2e --workspace=apps/e2e",
-		"update-all-packages": "npm-check-updates -u && npm i",
-		"dev:api": "npm run dev --workspace=apps/api-elearning",
-		"dev:admin": "npm run dev --workspace=apps/admin-portal",
-		"dev:student": "npm run dev --workspace=apps/student-portal",
-		"db:generate": "npm run generate --workspace=packages/database",
-		"db:migrate": "npm run migrate --workspace=packages/database",
-		"db:seed": "npm run seed --workspace=packages/database",
-		"stop:servers": "kill-port 3000 5173 5174"
+		"update-all-packages": "npm-check-updates -u && npm i"
 	},
 	"devDependencies": {
 		"@types/node": "^25.9.1",

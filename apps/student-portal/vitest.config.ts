@@ -11,5 +11,5 @@ export default mergeConfig(
 			setupFiles: ["./vitest.setup.ts"],
 			include: ["src/**/*.test.tsx"],
 		},
-	}),
+	})
 );
