@@ -8,6 +8,7 @@
 		"packages/*"
 	],
 	"scripts": {
+		"build": "npm run build:packages && npm run build --workspaces --if-present",
 		"build:packages": "npm run build --workspace=packages/shared-types && npm run build --workspace=packages/database",
 		"compile": "tsc --noEmit",
 		"db:generate": "npm run generate --workspace=packages/database",
