@@ -4,7 +4,7 @@ process.on('unhandledRejection', (reason) => {
     console.error('Full error:', JSON.stringify(reason, null, 2));
 });
 
-async function seed() {
+async function seed(): Promise<void> {
     console.log("Seeding database...");
 
     // Seed users (in production these come from Keycloak; this is for local dev)
@@ -99,9 +99,15 @@ async function seed() {
     console.log({ admin: admin.id, instructor: instructor.id, student: student.id, course: course.id });
 }
 
-seed()
-    .catch((e) => {
+async function main(): Promise<void> {
+    try {
+        await seed();
+    } catch (e) {
         console.error(e);
         process.exit(1);
-    })
-    .finally(() => prisma.$disconnect());
+    } finally {
+        await prisma.$disconnect();
+    }
+}
+
+void main();

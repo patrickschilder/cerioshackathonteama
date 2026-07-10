@@ -19,5 +19,13 @@
 		"typescript/prefer-nullish-coalescing": "error",
 		"typescript/require-await": "error"
 	},
+	"overrides": [
+		{
+			"files": ["apps/api-elearning/src/quiz/quiz.service.ts"],
+			"rules": {
+				"typescript/no-unnecessary-type-assertion": "off"
+			}
+		}
+	],
 	"ignorePatterns": ["**/dist", "**/node_modules"]
 }
