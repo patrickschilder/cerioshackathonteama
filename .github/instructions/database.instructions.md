@@ -10,4 +10,5 @@ applyTo: "packages/database/**"
 - Make schema changes explicit and safe; name models and fields clearly.
 - Prefer additive migrations during hackathon work unless removal is necessary.
 - After schema changes, make sure application code, shared types, and seed behavior remain aligned.
-- Validate database-related work with the repo scripts that exercise type generation, compile, and lint.
+- Follow the checkpoint rules in `validation.instructions.md` for database-related work (type
+  generation, compile, and lint at minimum).

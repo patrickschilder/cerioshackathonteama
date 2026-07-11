@@ -22,19 +22,27 @@ Use this skill when you want Copilot to help implement a feature while staying a
 2. Identify the owning frontend app, API app, package, and database touchpoints.
 3. Start from the nearest concrete anchor such as an existing route, module, component, or Prisma model.
 4. Make the smallest useful change first.
-5. Run `npm run lint` and `npm run compile` after each meaningful checkpoint.
+5. Run the checkpoint commands required by `validation.instructions.md` after each meaningful
+   change (lint, compile, test — plus a regression test for bug fixes).
 6. Summarize what changed, what was validated, and what remains.
 
 ## Constraints
 
 - Stay within TypeScript, React portals, NestJS APIs, Prisma, and PostgreSQL.
-- Stay within TypeScript, React, NestJS, Prisma, and PostgreSQL.
 - Prefer existing patterns from neighboring code.
 - Do not add a new framework unless the task explicitly asks for it.
 - Do not skip validation after a meaningful change.
+- Follow the area-specific instructions file for whatever you touch:
+  `frontend.instructions.md`, `backend.instructions.md`, `database.instructions.md`, or
+  `architecture.instructions.md` for placement decisions.
 
 ## Suggested Prompt Shapes
 
 - "Implement a small patient appointment flow following the hackathon workflow skill."
 - "Scaffold a new frontend page and matching NestJS endpoint using the hackathon workflow skill."
 - "Review this feature against the hackathon workflow skill and tell me where it breaks the architecture."
+
+## Handoff
+
+- Need a coverage audit or help picking test design techniques? Use the Test Manager agent.
+- Ready to write the actual unit/E2E tests? Use the Tester agent.

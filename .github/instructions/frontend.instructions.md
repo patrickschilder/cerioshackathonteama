@@ -10,4 +10,4 @@ applyTo: "apps/*-portal/**"
 - Prefer existing routing, API client, and styling patterns from neighboring frontend code.
 - Keep forms and data fetching simple and explicit.
 - Do not introduce framework-specific conventions that do not belong to the chosen starter stack.
-- Validate meaningful frontend changes with `npm run lint` and `npm run compile`.
+- Follow the checkpoint rules in `validation.instructions.md` for meaningful frontend changes.

@@ -11,3 +11,4 @@ applyTo: "apps/api-*/**"
 - Keep auth, validation, and persistence concerns separate.
 - Prefer explicit request and response typing.
 - For new endpoints, think through the contract from controller to service to Prisma access before writing code.
+- Follow the checkpoint rules in `validation.instructions.md` for meaningful backend changes.

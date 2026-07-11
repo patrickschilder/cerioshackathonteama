@@ -46,6 +46,9 @@ Use these black-box and experience-based techniques to derive test cases before 
 5. Implement or guide writing the tests, following repo naming/location conventions (`*.spec.ts`, `*.test.tsx`, colocated; E2E only in `apps/e2e`).
 6. Run `npm run lint`, `npm run compile`, and `npm run test` and fix failures before widening scope.
 7. Summarize which technique(s) produced which test cases and what gap they close.
+8. If the ask is broader than one feature (e.g. "is this module well-tested?", "what's still
+   missing across the codebase?"), hand off to the Test Manager agent for a coverage audit and
+   prioritised test plan first, then come back here to implement it.
 
 ## Output Expectations
 
